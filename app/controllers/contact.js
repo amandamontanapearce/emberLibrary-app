@@ -11,10 +11,14 @@ export default Ember.Controller.extend({
 
   actions: {
     sendMessage() {
-      alert(`Sending message is in progress: ${this.get('message')}`);
-      this.set('responseMessage', `Thank you! We've just sent you message and will reply promptly: ${this.get('message')}`);
-      this.set('emailAddress', '');
-      this.set('message', '');
+      const email = this.get('emailAddress');
+      const message = this.get('message');
+      const newMessage = this.store.createRecord('contact', {email: email, message: message});
+      newMessage.save().then((response) => {
+        this.set('responseMessage', `Thank you! We've just sent you message and will reply promptly: ${response.get('message')}`);
+        this.set('emailAddress', '');
+        this.set('message', '');
+      });
     }
   }
 
